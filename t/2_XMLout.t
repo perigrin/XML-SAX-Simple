@@ -341,9 +341,9 @@ ok(69, m{^\s*$}s);
 # <?xml version='1' encoding='ISO-8859-1'?>
 # <opt one="1" />
 
-$_ = XMLout($ref, xmldecl => "<?xml version='1.0' encoding='ASCII'?>");
+$_ = XMLout($ref, xmldecl => "<?xml version='1.0' encoding='US-ASCII'?>");
 ok(70, DataCompare($ref, XMLin($_))); # Parses back OK
-ok(71, s{^\Q<?xml version='1.0' encoding='ASCII'?>\E}{}s);
+ok(71, s{^\Q<?xml version='1.0' encoding='US-ASCII'?>\E}{}s);
 ok(72, s{<opt one="1" />}{}s);
 ok(73, m{^\s*$}s);
 

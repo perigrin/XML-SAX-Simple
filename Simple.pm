@@ -1,4 +1,4 @@
-# $Id: Simple.pm,v 1.1.1.1 2001/11/13 14:07:40 matt Exp $
+# $Id: Simple.pm,v 1.2 2001/11/21 10:16:16 matt Exp $
 
 package XML::SAX::Simple;
 
@@ -9,7 +9,7 @@ use XML::SAX;
 use XML::Handler::Trees;
 @ISA = ('XML::Simple');
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 @EXPORT = qw(XMLin XMLout);
 
