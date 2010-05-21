@@ -1,32 +1,31 @@
 # $Id: Simple.pm,v 1.2 2001/11/21 10:16:16 matt Exp $
 
 package XML::SAX::Simple;
-
 use strict;
-use vars qw($VERSION @ISA @EXPORT);
+our $VERSION = '0.02';
+
 use XML::Simple ();
 use XML::SAX;
 use XML::Handler::Trees;
-@ISA = ('XML::Simple');
+use Scalar::Util qw(blessed);
 
-$VERSION = '0.02';
-
-@EXPORT = qw(XMLin XMLout);
+our @ISA    = ('XML::Simple');
+our @EXPORT = qw(XMLin XMLout);
 
 sub XMLin {
     my $self;
-    if($_[0]  and  UNIVERSAL::isa($_[0], 'XML::Simple')) {
+    if ( $_[0] and blessed $_[0] and $_[0]->isa(__PACKAGE__) ) {
         $self = shift;
     }
     else {
-        $self = new XML::SAX::Simple();
+        $self = XML::SAX::Simple->new();
     }
     $self->SUPER::XMLin(@_);
 }
 
 sub XMLout {
     my $self;
-    if($_[0]  and  UNIVERSAL::isa($_[0], 'XML::Simple')) {
+    if ( $_[0] and blessed $_[0] and $_[0]->isa(__PACKAGE__) ) {
         $self = shift;
     }
     else {
@@ -37,32 +36,32 @@ sub XMLout {
 
 sub build_tree {
     my $self = shift;
-    my ($filename, $string) = @_;
-    
-    if($filename  and  $filename eq '-') {
-        local($/);
-        $string = <STDIN>;
+    my ( $filename, $string ) = @_;
+
+    if ( $filename and $filename eq '-' ) {
+        local ($/);
+        $string   = <STDIN>;
         $filename = undef;
     }
-    
+
     my $handler = XML::Handler::Tree->new();
-    my $parser = XML::SAX::ParserFactory->parser(Handler => $handler);
+    my $parser = XML::SAX::ParserFactory->parser( Handler => $handler );
     my $tree;
-    if($filename) {
+    if ($filename) {
         $tree = $parser->parse_uri($filename);
     }
     else {
-        if (ref($string)) {
-            $tree = $parser->parse_file($string);
+        if (ref($string) ) {
+            $tree = $parser->parse_string($$string);
         }
         else {
-            $tree = $parser->parse_string($string);
+            $tree = $parser->parse_file($string);
         }
     }
 
     # use Data::Dumper;
     # warn("returning ", Dumper($tree), "\n");
-    return($tree);
+    return ($tree);
 }
 
 1;
